@@ -14,9 +14,13 @@
             <th>Genre</th>
         </tr>
 
-        @foreach ($games as $game)
+     @foreach ($games as $game)
             <tr>
-                <td>{{ $game['title'] }}</td>
+                <td>
+                    <a href="{{ route('games.show', $game['id']) }}">
+                        {{ $game['title'] }}
+                    </a>
+                </td>
                 <td>{{ $game['developer'] }}</td>
                 <td>{{ $game['genre'] }}</td>
             </tr>
