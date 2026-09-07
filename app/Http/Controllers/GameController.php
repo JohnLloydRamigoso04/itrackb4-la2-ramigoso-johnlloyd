@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 class GameController extends Controller
 {
-
     private function getGames()
     {
         return [
@@ -22,18 +21,50 @@ class GameController extends Controller
     public function index()
     {
         $games = $this->getGames();
-        return view('games.index', ['games' => $games]);
+        return view('games.index', [
+            'games' => $games,
+            'activeFilter' => 'All'
+        ]);
     }
-}
 
-public function show($id)
+    public function featured()
     {
         $games = $this->getGames();
-        
-        // If the ID does not exist in our array, stop and show a 404
+        $featuredGame = $games[2]; // Featured pick: Elden Ring
+        return view('games.show', ['game' => $featuredGame]);
+    }
+
+    public function filter($genre = null)
+    {
+        $allGames = $this->getGames();
+
+        if ($genre === null) {
+            $games = $allGames;
+            $activeFilter = 'All';
+        } else {
+            $games = [];
+            foreach ($allGames as $game) {
+                if (strtolower($game['genre']) === strtolower($genre)) {
+                    $games[$game['id']] = $game;
+                }
+            }
+            $activeFilter = $genre;
+        }
+
+        return view('games.index', [
+            'games' => $games,
+            'activeFilter' => $activeFilter
+        ]);
+    }
+
+    public function show($id)
+    {
+        $games = $this->getGames();
+
         if (!isset($games[$id])) {
             abort(404);
         }
 
         return view('games.show', ['game' => $games[$id]]);
     }
+}
