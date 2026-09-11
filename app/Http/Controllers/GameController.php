@@ -68,3 +68,4 @@ class GameController extends Controller
         return view('games.show', ['game' => $games[$id]]);
     }
 }
+
